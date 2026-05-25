@@ -1,8 +1,9 @@
 const express = require("express");
-const { fetchAllPosts, createPost, updatePost } = require("../db/posts");
+const { fetchAllPosts, createPost, updatePost, deletePost } = require("../db/posts");
 
 const router = express.Router();
 
+// get all posts
 router.get("/", async(req, res) => {
   try {
     const posts = await fetchAllPosts();
@@ -12,6 +13,7 @@ router.get("/", async(req, res) => {
   }
 });
 
+// create a new post
 router.post("/", async(req, res) => {
   try {
     const { username, message } = req.body;
@@ -31,13 +33,27 @@ router.post("/", async(req, res) => {
   }
 })
 
+// update an old post
 router.put("/", async(req, res) => {
   try {
-    const res = updatePost(req.body.message);
+    const result = await updatePost(req.body);
+    res.status(201).json(result)
   } catch (err) {
-    console.lerror("error in put", err);
+    console.error("error in put", err);
     // sends err back to react
     res.status(500).json({message: "Internal server error", error: err.message });
+  }
+})
+
+// delete a post
+router.delete("/", async(req, res) => {
+  try {
+    // console.log(`req.body: ${req.body}`);
+    const result = await deletePost(req.body);
+    res.status(201).json(result);
+  } catch (err) {
+    console.error("error in delete", err);
+    res.status(500).json({message: "Internal server error", error: err.message});
   }
 })
 

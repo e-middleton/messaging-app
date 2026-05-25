@@ -1,12 +1,10 @@
 import './App.css'
-import Messages from './components/Messages';
-import PostForm from './components/PostForm';
+import MessageApp from './components/MessageApp';
 
 function App() {
   return (
     <>
-      <PostForm />
-      <Messages />
+      <MessageApp />
     </>
   )
 }

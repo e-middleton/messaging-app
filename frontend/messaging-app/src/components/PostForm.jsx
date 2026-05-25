@@ -2,7 +2,7 @@ import {Box, Button, TextField} from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 
-const PostForm = () => {
+const PostForm = ( {setRefresh} ) => {
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState(false);
@@ -24,16 +24,21 @@ const PostForm = () => {
       const response2 = await axios.put('http://localhost:3001/users', post);
       console.log(response);
       console.log(response2);
+      setRefresh(prevState => !prevState);
+
+      // clear out old values
+      setUsername("");
+      setMessage("");
     } catch (err) {
       console.error(err.response?.data);
     }
     
   }
-  
+
   return (
     <>
       <div style={{margin:"1rem"}}>
-        <Box>
+        <Box sx={{display: "flex", flexDirection: "row", alignItems:"center", gap:"0.5rem"}}>
           <TextField
           required
           value={username}
@@ -53,6 +58,7 @@ const PostForm = () => {
           </TextField>
           <Button
           onClick={() => handlePostSubmit()}
+          variant="contained"
           >
             Submit
           </Button>
